@@ -1,28 +1,24 @@
 filebeat.inputs:
-- type: docker
+- type: container
   combine_partial: true
-  containers:
-    path: "/usr/share/dockerlogs/"
-    stream: "stdout"
-    ids:
-      - "*"
+  paths: "/usr/share/filebeat/dockerlogs/*/*.log"
   exclude_files: ['\.gz$']
 
 filebeat.modules:
 - module: nginx
   access:
     enabled: true
-    #var.paths: ["/var/log/nginx/access.log*"]    
+    var.paths: ["/usr/share/filebeat/nginx/access.log"]    
   error:
     enabled: true
-    #var.paths: ["/var/log/nginx/error.log*"]
+    var.paths: ["/usr/share/filebeat/nginx/error.log"]
 
 - module: system
   syslog:
     enabled: true
-    #var.paths: ["/var/log/syslog"]
-  auth:
-    enabled: true
+    var.paths: ["/usr/share/filebeat/log/syslog"]
+  #auth:
+  # enabled: true
     #var.paths: ["/var/log/syslog"]
 
 processors:

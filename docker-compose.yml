@@ -27,7 +27,7 @@ services:
       - elk
   
   filebeat:
-    user: root
+    user: root 
     build:
       context: filebeat/
       args:
@@ -38,8 +38,8 @@ services:
       # needed to access additional informations about containers
      - "/var/run/docker.sock:/var/run/docker.sock"
      - "./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
-     - "/mnt/user/appdata/swag/log/nginx:/var/log/nginx/:ro"
-     - "/var/log/syslog/:/var/log/syslog/:ro"
+     - "/mnt/user/appdata/swag/log/nginx:/usr/share/filebeat/nginx/:ro"
+     - "/var/log/syslog/:/usr/share/filebeat/log/syslog/:ro"
     networks:
       - elk
     depends_on:
