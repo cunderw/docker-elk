@@ -13,7 +13,7 @@ filebeat.modules:
 - module: nginx
   access:
     enabled: true
-    var.paths: ["var/log/nginx/access.log*"]		
+    var.paths: ["var/log/nginx/access.log*"]    
   error:
     enabled: true
     var.paths: ["var/log/nginx/error.log*"]
@@ -23,7 +23,7 @@ filebeat.modules:
     enabled: true
     var.paths: ["/var/log/syslog"]
   auth:
-  	enabled: true
+    enabled: true
     var.paths: ["/var/log/syslog"]
 
 processors:
@@ -36,12 +36,12 @@ processors:
 - add_docker_metadata:
     host: "unix:///var/run/docker.sock"
     match_fields: ["system.process.cgroup.id"]
-       match_pids: ["process.pid", "process.ppid"]
-       match_source: true
-       match_source_index: 4
-       match_short_id: false
-       cleanup_timeout: 60
-      labels.dedot: false
+    match_pids: ["process.pid", "process.ppid"]
+    match_source: true
+    match_source_index: 4
+    match_short_id: false
+    cleanup_timeout: 60
+    labels.dedot: false
 
 filebeat.config.modules:
   path: /usr/share/filebeat/modules.d/*.yml 
@@ -49,19 +49,11 @@ filebeat.config.modules:
 
 # setup filebeat to send output to logstash
 output.logstash:
+  enabled: true 
   hosts: ["logstash"]
 
 setup.kibana:
   host: "localhost:5601"
-
-# Write Filebeat own logs only to file to avoid catching them with itself in docker log files
-logging.level: error
-logging.to_files: false
-logging.to_syslog: false
-loggins.metrice.enabled: false
-logging.files:
-  path: /var/log/filebeat
-  name: filebeat
-  keepfiles: 7
-  permissions: 0644
-ssl.verification_mode: none
+  protocol: "https"
+  username: "elastic"
+  password: "changeme"
